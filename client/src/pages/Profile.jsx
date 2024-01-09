@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {useRef, useState, useEffect} from 'react'
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage';
 import { app } from '../firebase';
-import { updateUserStart, updateUserFailure, updateUserSuccess } from '../redux/user/userSlice';
+import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 export default function Profile() {
@@ -70,7 +70,7 @@ export default function Profile() {
                 },
                 body: JSON.stringify(formData),
             });
-            console.log(await res.json())
+            //console.log(res.json())
             const data = await res.json();
             
             if(data.success === false){
@@ -81,6 +81,27 @@ export default function Profile() {
             setUpdateSuccess(true);
         } catch (error) {
                 dispatch(updateUserFailure(error.message));
+        }
+    }
+    const handleDeleteUser = async () => {
+        try{
+            console.log("running here")
+            dispatch(deleteUserStart());
+            const res = await fetch(`/api/user/delete/${currentUser._id}`, 
+            {
+            method: 'DELETE',
+            });
+            console.log(res)
+            const data = await res.json();
+            
+            if (data.success === false) {
+            dispatch(deleteUserFailure(data.message));
+            return;
+        }
+        dispatch(deleteUserSuccess(data));
+        }catch(error){
+            console.log("next/")
+            dispatch(deleteUserFailure(error.message))
         }
     }
 
@@ -119,7 +140,7 @@ export default function Profile() {
         </button>
     </form>
     <div className="flex justify-between mt-5">
-        <span className='text-red-700 cursor-pointer'>Delete Account</span>
+        <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>Delete Account</span>
         <span className='text-red-700 cursor-pointer'>Sign Out</span>
     </div>
 
