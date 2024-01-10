@@ -14,7 +14,7 @@ export default function Header() {
        navigate(`/search?${searchQuery}`);
     }
     useEffect(()=>{
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(location.search);
         const searchTermFromUrl = urlParams.get('searchTerm')
         if(searchTermFromUrl){
             setSearchTerm(searchTermFromUrl);
@@ -48,7 +48,7 @@ export default function Header() {
             <li className='hidden sm:inline text-slate-700 hover:underline'>About</li>
         </Link>
         <Link to='/profile'>
-        {console.log(currentUser)}
+       
         {currentUser ? (
             <img className='rounded-full h-7 w-7 object-cover' src={currentUser.avator} alt=''/>
         ): (<li className='text-slate-700 hover:underline'>Sign In</li>)

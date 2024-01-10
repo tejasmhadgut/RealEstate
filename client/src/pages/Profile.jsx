@@ -19,7 +19,7 @@ export default function Profile() {
     const [userListings, setUserListings] = useState([]);
     const dispatch = useDispatch();
 
-    console.log("File one "+file);
+   
     useEffect(() => {
         if(file){
             handleFileUpload(file);
@@ -53,15 +53,13 @@ export default function Profile() {
         };
 
     const handleChange = (e) => {
-        console.log("target one ")
-        console.log(e.target.value)
+       
         setFormData({...formData, [e.target.id]: e.target.value });
-       // console.log("after target "+formData)
+       
     };
 
     const handleSubmit = async (e) => {
-        console.log("on submit ")
-        console.log(formData)
+       
         
         e.preventDefault();
         try {
@@ -73,7 +71,7 @@ export default function Profile() {
                 },
                 body: JSON.stringify(formData),
             });
-            //console.log(res.json())
+            
             const data = await res.json();
             
             if(data.success === false){
@@ -88,13 +86,13 @@ export default function Profile() {
     }
     const handleDeleteUser = async () => {
         try{
-            console.log("running here")
+            
             dispatch(deleteUserStart());
             const res = await fetch(`/api/user/delete/${currentUser._id}`, 
             {
             method: 'DELETE',
             });
-            console.log(res)
+            
             const data = await res.json();
             
             if (data.success === false) {
@@ -103,7 +101,7 @@ export default function Profile() {
         }
         dispatch(deleteUserSuccess(data));
         }catch(error){
-            console.log("next/")
+            
             dispatch(deleteUserFailure(error.message))
         }
     }
